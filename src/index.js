@@ -2,9 +2,8 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
 import { BrowserRouter, Routes, Route, Link, } from 'react-router-dom';
-
 import App from "./App";
-
+import { useState } from 'react';
 
  function Contact(){
   return <div>
@@ -46,8 +45,10 @@ Applied core programming concepts such as loops, conditional logic, and user int
   </div>
 }
 function Home(){
+  
   return (
     <BrowserRouter>
+    
       {/* Navigation */}
       <nav>
         <Link to="/">Home</Link> |{" "}
@@ -69,10 +70,61 @@ function Home(){
   );
 }
 
+const ToggleSidebar = () => {
+    const [isOpen, setIsopen] = useState(false);
+
+    const ToggleSidebar = () => {
+        isOpen === true ? setIsopen(false) : setIsopen(true);
+    }
+    return (
+      <BrowserRouter>
+        <>
+            <div className="container-fluid mt-3">
+                
+                    <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-md">
+                        <div className="container-fluid p-2">
+                            <a className="navbar-brand text-primary mr-0">Ben Freed Portfolio</a>
+                            <div className="form-inline ml-auto">
+                                <div className="btn btn-primary" onClick={ToggleSidebar} >
+                                    <i className="fa fa-bars"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                    <div className={`sidebar ${isOpen == true ? 'active' : ''}`}>
+                        <div className="sd-header">
+                            <h4 className="mb-0">Page Navigation</h4>
+                            <div className="btn btn-primary" onClick={ToggleSidebar}><i className="fa fa-times"></i></div>
+                        </div>
+                        <div className="sd-body">
+                            <ul>
+                                <nav>
+        <Link to="/">Home</Link> |{" "}
+        <Link to="/about">About</Link> |{" "}
+        <Link to="/skills">Skills</Link> |{" "}
+        <Link to="/projects">Projects</Link> |{" "}
+        <Link to="/contact">Contact</Link>
+      </nav>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className={`sidebar-overlay ${isOpen == true ? 'active' : ''}`} onClick={ToggleSidebar}></div>
+           </div>
+           
+        </>
+        <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/skills" element={<Skills />} />
+        <Route path="/projects" element={<Projects />} />
+      </Routes>
+    </BrowserRouter>)
+}
 const root = createRoot(document.getElementById("root"));
 root.render(
 
-    <Home />
+    <ToggleSidebar />
 
 );
 // const root2 = createRoot(document.getElementById("root2"));
