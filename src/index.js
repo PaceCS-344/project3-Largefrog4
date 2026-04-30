@@ -3,8 +3,20 @@ import { createRoot } from "react-dom/client";
 import "./styles.css";
 import { BrowserRouter, Routes, Route, Link, } from 'react-router-dom';
 import App from "./App";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+ import { Octokit } from "@octokit/rest";
+// const aaa = async () => {
+//   const octokit = new Octokit({});
+//   const response = await octokit.request("GET /users/Largefrog4/repos", {
+//     username: "{Largefrog4}",
+//     headers: {
+//       'X-GitHub-Api-Version': '2026-03-10'
+//     }, 
+//     sort: created,
+//     per_page: 2,
 
+//   });}
+ 
  function Contact(){
   return <div>
     <p>Contact me<br></br>
@@ -30,9 +42,51 @@ return <div>
     </p>
   </div>
 }
+
+function UserInfoCard({ userData }) {
+  console.log(userData)
+  console.log(userData.response)
+    return (
+        <div className="datacontainer">
+           
+           
+            {userData.login ? (<div className="dataitem">
+                Name : {userData.login}</div>) : (<div></div>)}
+            
+        </div>
+    );
+}
+
  function Projects(){
+  const [username, setUsername] = useState("");
+    const [userData, setUserData] = useState(Object);
+
+    useEffect(() => {
+        getUserData();
+    }, [username]);
+
+    var gitHubUrl = "https://api.github.com/users/Largefrog4/repos";
+
+    const getUserData = async () => {
+        const octokit = new Octokit({});
+    const response = await octokit.request("GET /users/Largefrog4/repos", {
+    username: "{Largefrog4}",
+    headers: {
+      'X-GitHub-Api-Version': '2026-03-10'
+    }, 
+    
+
+  }); 
+  console.log(response)
+        
+        setUserData({response})
+        
+    };
+
+
   return <div>
-    <p>Projects</p>
+    <UserInfoCard userData={userData} />
+    {/* <p>Projects</p>
     <p>Team Web Design Project – Fictional Game Company Website                                       Jan 2024 – May 2024<br></br>
 Collaborated with a student team of 4 to design and build a website for a fictional game company using HTML and CSS.
 Implemented page layouts and visual elements to improve site presentation and usability.<br></br>
@@ -41,7 +95,7 @@ Python Blackjack Game                                                           
 Developed a simplified blackjack game in Python as part of coursework.
 Applied core programming concepts such as loops, conditional logic, and user interaction.
 
-    </p>
+    </p> */}
   </div>
 }
 function Home(){
